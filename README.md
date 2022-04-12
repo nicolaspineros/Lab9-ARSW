@@ -59,26 +59,54 @@ Procedemos a hacer la creacion de la maquina
     ![](images/punto5.png)
 
     ![](images/punto5%2C1.png)
-    
+
 6. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
 
 ![](images/part1/part1-vm-3000InboudRule.png)
 
+![](images/punto6.png)
+
+![](images/answ6.png)
+
 7. La función que calcula en enésimo número de la secuencia de Fibonacci está muy mal construido y consume bastante CPU para obtener la respuesta. Usando la consola del Browser documente los tiempos de respuesta para dicho endpoint usando los siguintes valores:
     * 1000000
+
+    ![](images/7a.png)
     * 1010000
+
+    ![](images/7b.png)
     * 1020000
+
+    ![](images/7c.png)
     * 1030000
+
+    ![](images/7d.png)
     * 1040000
+
+    ![](images/7e.png)
     * 1050000
+
+    ![](images/7f.png)
     * 1060000
+
+    ![](images/7g.png)
     * 1070000
+
+    ![](images/7h.png)
     * 1080000
-    * 1090000    
+
+    ![](images/7i.png)
+    * 1090000
+
+    ![](images/7j.png)    
 
 8. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
 
 ![Imágen 2](images/part1/part1-vm-cpu.png)
+
+![](images/8a.png)
+![](images/8b.png)
+![](images/8c.png)
 
 9. Ahora usaremos Postman para simular una carga concurrente a nuestro sistema. Siga estos pasos.
     * Instale newman con el comando `npm install newman -g`. Para conocer más de Newman consulte el siguiente [enlace](https://learning.getpostman.com/docs/postman/collection-runs/command-line-integration-with-newman/).
