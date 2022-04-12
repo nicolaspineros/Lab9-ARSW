@@ -161,23 +161,82 @@ Procedemos a hacer la creacion de la maquina
     ![](images/11j.png)    
 
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
+
+    Si se cumple con el escenario de calidad de escalabilidad ya que al modificar el tamaño de nuestra maquina modificamos/mejoramos las especificaciones de la VM obteniendo de esta manera mejores tiempos de respuesta y disminuyendo el consumo de CPU de la VM
+
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
 
 **Preguntas**
 
 1. ¿Cuántos y cuáles recursos crea Azure junto con la VM?
+
+    Crea 7 recuros:
+
+    - Red Virtual
+    - Interfaz de red
+    - Maquina Virtual
+    - Direccion ip publica
+    - Grupo de Seguridad de red
+    - Clave SSH
+    - Disco
+ 
+
 2. ¿Brevemente describa para qué sirve cada recurso?
+
+    - Red Virtual: Azure Virtual Network (VNet) es el bloque de creación fundamental de una red privada en Azure. VNet permite muchos tipos de recursos de Azure, como Azure Virtual Machines (máquinas virtuales), para comunicarse de forma segura entre usuarios, con Internet y con las redes locales. VNet es similar a una red tradicional que funcionaría en su propio centro de datos, pero aporta las ventajas adicionales de la infraestructura de Azure, como la escala, la disponibilidad y el aislamiento.
+
+    - Interfaz de red: Una interfaz de red permite que una VM de Azure se comunique con Internet, Azure y recursos locales. Una VM puede tener una o varias interfaces de red.
+
+    - Maquina Virtual: Azure Virtual Machines (VM) es uno de los diversos tipos de recursos informáticos a petición y escalables que ofrece Azure. Por lo general, elegirá una máquina virtual cuando necesite más control sobre su entorno informático del que ofrecen las otras opciones. Una máquina virtual de Azure le ofrece la flexibilidad de la virtualización sin necesidad de adquirir y mantener el hardware físico que la ejecuta. Sin embargo, aún necesita mantener la máquina virtual con tareas como configurar, aplicar revisiones e instalar el software que se ejecuta en ella.
+
+    - Direccion ip publica: Las direcciones IP públicas permiten a los recursos de Internet la comunicación entrante a los recursos de Azure. Permiten que los recursos de Azure se comuniquen con los servicios de Azure orientados al público e Internet. Hasta que cancele la asignación, la dirección estará dedicada al recurso. Un recurso sin una dirección IP pública asignada puede realizar comunicaciones salientes. Azure asigna dinámicamente una dirección IP disponible que no está dedicada al recurso.
+
+    - Grupo de Seguridad de red: Un grupo de seguridad de red (NSG) contiene una lista de reglas de seguridad que permiten o deniegan el tráfico de red a recursos conectados a Azure Virtual Network (VNet). Los NSG se pueden asociar a subredes o a interfaces de red individuales. Un NSG asociado a una interfaz de red se aplica solo a la máquina virtual asociada. Cuando un grupo de seguridad de red está asociado a una subred, las reglas se aplican a todos los recursos conectados a la subred.
+
+    - Clave SSH: SSH es un protocolo de conexión cifrada que permite inicios de sesión seguros a través de conexiones no seguras. SSH es el protocolo de conexión predeterminado de las máquinas virtuales Linux hospedadas en Azure.
+
+    - Disco: Almacenamiento del SO de la maquina virtual
+
 3. ¿Al cerrar la conexión ssh con la VM, por qué se cae la aplicación que ejecutamos con el comando `npm FibonacciApp.js`? ¿Por qué debemos crear un *Inbound port rule* antes de acceder al servicio?
+
+Porque el servicio esta asociado al usuario que realiza la conexion por lo que cuando se cierra la conexion ssh con la VM se cae la aplicación
+
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
+
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
+
+    ![](images/pregunta5.png)
+
+    Cada peticion realizada al calculo de la aplicacion representa un uso de CPU por realizar calculos recurrentes que llevan tiempo al no tener concurrencia y memorización.
+
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
     * Tiempos de ejecución de cada petición.
     * Si hubo fallos documentelos y explique.
+
+    ![](images/pregunta6.png)
+
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
+
+| Size             | vCPUs  | RAM (GiB)  |  Data disks| Max IOPS |Temp storage (GiB) | Cost/month |
+|------------------|--------|------------|------------|----------|-------------------|------------|
+|B1ls              |  1     |0.5         |2           |160       |4                  |3,80 US$    |
+|B2ms              |  2     |8           |4           |1920      |16                 |60,74 US$   |
+
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
+
+    Es una solucion pero no resuelve todos los problemas ya que permite disminuir el uso de recursos, como el consumo de CPU pero tambien representa mayor costo y el hecho de que la FibonacciApp no esta implementada de la mejor manera.
+
 9. ¿Qué pasa con la infraestructura cuando cambia el tamaño de la VM? ¿Qué efectos negativos implica?
+
+    implica reiniciar la maquina por lo que hay una interrupcion en el servicio que se este prestando.
+
 10. ¿Hubo mejora en el consumo de CPU o en los tiempos de respuesta? Si/No ¿Por qué?
+
+    Si, ya que se cuenta con mas recursos para atender las peticiones.
+
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
+
+    No
 
 ### Parte 2 - Escalabilidad horizontal
 
