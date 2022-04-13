@@ -325,15 +325,60 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 **Preguntas**
 
 * ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
+
+    Los balanceadores de carga de Azure vienen en dos variedades. Hay balanceadores de carga públicos y balanceadores de carga internos, que también se conocen como balanceadores de carga privados.
+
+    Un equilibrador de carga público se usa cuando necesita equilibrar la carga del tráfico de Internet entrante a sus máquinas virtuales. Este tipo de balanceador de carga requiere que asigne una dirección IP pública a la interfaz del balanceador de carga. También es importante tener en cuenta que los balanceadores de carga públicos pueden proporcionar conexiones salientes a Internet para máquinas virtuales que se encuentran dentro de su red virtual de Azure. Para que esto suceda, lo que hacen los balanceadores de carga públicos es traducir las direcciones IP privadas de las máquinas virtuales a direcciones IP públicas. Esto les permite comunicarse externamente aunque las propias máquinas virtuales no tengan direcciones IP públicas.
+
+    Los balanceadores de carga internos se pueden usar en situaciones en las que solo se requieren direcciones IP privadas en la interfaz. Esto significa que los balanceadores de carga internos están limitados a casos de uso en los que solo necesita equilibrar la carga del tráfico dentro de su red virtual de Azure o desde una red local que se ha conectado a su red virtual a través de una conexión VPN o ExpressRoute.
+
+    * SKU (Stock Keeping Unit) Representa una unidad de mantenimiento de existencias, lo cual significa que es un codigo unico asignado a un servicio o producto de Azure, el cual nos permite a nosotros como usuarios la posibilidad de comprar existencias de los mismos.
+
+        - Basico: Equipado para aplicaciones a pequeña escala que no necesitan alta disponibilidad ni redundancia. No es compatible con las zonas de disponibilidad. Admite hasta 200 configuraciones.
+        - Estandar: Equipado para el tráfico de la capa de red de equilibrio de carga cuando se necesitan un alto rendimiento y una latencia muy baja. Enruta el tráfico dentro y entre regiones, y a zonas de disponibilidad para lograr una alta resistencia. Admite hasta 600 configuraciones.
+        - Premium: Los registros premium brindan la mayor cantidad de almacenamiento incluido y operaciones simultáneas, lo que permite escenarios de gran volumen. Además de un mayor rendimiento de imágenes, Premium agrega funciones como la replicación geográfica para administrar un registro único en varias regiones, confianza en el contenido para la firma de etiquetas de imágenes, enlace privado con puntos finales privados para restringir el acceso al registro.
+        
+
 * ¿Cuál es el propósito del *Backend Pool*?
+
+    Define el grupo de recursos que atenderán el tráfico para una regla de equilibrio de carga determinada.
+
 * ¿Cuál es el propósito del *Health Probe*?
+
+     La configuración del sondeo de estado y las respuestas del sondeo determina qué instancias del grupo de back-end recibirán nuevas conexiones. Utilice sondeos de estado para detectar el error de una aplicación. Genere una respuesta personalizada a un sondeo de estado. Use la sonda de estado para el control de flujo para administrar la carga o el tiempo de inactividad planificado. Cuando falla un sondeo de estado, el balanceador de carga dejará de enviar nuevas conexiones a la respectiva instancia en mal estado. La conectividad saliente no se ve afectada, solo la entrante. Las sondas de estado admiten varios protocolos. La disponibilidad de un protocolo de sondeo de estado específico varía según la SKU de Load Balancer. 
+
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
+
+    Se usa una regla de equilibrador de carga para definir cómo se distribuye el tráfico entrante a todas las instancias dentro del grupo de back-end. Una regla de equilibrio de carga asigna una configuración de IP y un puerto front-end determinados a varias direcciones IP y puertos de back-end. Un ejemplo sería una regla creada en el puerto 80 para equilibrar la carga del tráfico web.    
+
 * ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
+
+    Es el componente fundamental de su red privada en Azure. VNet permite que muchos tipos de recursos de Azure, como Azure Virtual Machines (VM), se comuniquen de forma segura entre sí, Internet y las redes locales. VNet es similar a una red tradicional que operaría en su propio centro de datos, pero trae consigo beneficios adicionales de la infraestructura de Azure, como escala, disponibilidad y aislamiento.
+
+    Subnet - Todos los recursos de Azure implementados en una red virtual se implementan en una subred dentro de una red virtual. las subredes le permiten segmentar la red virtual en una o más subredes y asignar una parte del espacio de direcciones de la red virtual a cada subred.
+
+    address space - Al crear una red virtual, debe especificar un espacio de direcciones IP privado personalizado mediante direcciones públicas y privadas (RFC 1918). Azure asigna a los recursos de una red virtual una dirección IP privada desde el espacio de direcciones que usted asigne. Por ejemplo, si implementa una máquina virtual en una red virtual con espacio de direcciones, 10.0.0.0/16, a la máquina virtual se le asignará una IP privada como 10.0.0.4.
+
+    addres range - El rango debe estar dentro del espacio de direcciones que ingresó para la red virtual. El rango más pequeño que puede especificar es /29, que proporciona ocho direcciones IP para la subred. Azure reserva la primera y la última dirección de cada subred para la conformidad con el protocolo. Se reservan tres direcciones adicionales para el uso del servicio de Azure. Como resultado, una red virtual con un rango de direcciones de subred de /29 solo tiene tres direcciones IP utilizables.
+
 * ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
+
+    Las zonas de disponibilidad de Azure son ubicaciones separadas físicamente dentro de cada región de Azure que toleran errores locales. Las fallas pueden variar desde fallas de software y hardware hasta eventos como terremotos, inundaciones e incendios. La tolerancia a los errores se logra gracias a la redundancia y el aislamiento lógico de los servicios de Azure. Para garantizar la resiliencia, hay un mínimo de tres zonas de disponibilidad separadas en todas las regiones habilitadas para zonas de disponibilidad.
+
+    Las zonas de disponibilidad están diseñadas para que, si una zona se ve afectada, las dos zonas restantes admitan los servicios regionales, la capacidad y la alta disponibilidad.
+
+    zone redundant - con replicación automática entre zonas, o zonales, con instancias ancladas a una zona específica.
+
 * ¿Cuál es el propósito del *Network Security Group*?
+
+     filtrar el tráfico de red hacia y desde los recursos de Azure en una red virtual de Azure. Un grupo de seguridad de red contiene reglas de seguridad que permiten o deniegan el tráfico de red entrante o el tráfico de red saliente desde varios tipos de recursos de Azure. Para cada regla, puede especificar el origen y el destino, el puerto y el protocolo.
+
 * Informe de newman 1 (Punto 2)
+
+    ![](images/newman.png)
+
 * Presente el Diagrama de Despliegue de la solución.
 
-
+    ![](images/Diagrama.png)
 
 
